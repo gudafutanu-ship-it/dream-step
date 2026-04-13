@@ -1,10 +1,893 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0b1020">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dream Step">
   <title>Dream Step</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --panel:#121933;
+      --line:rgba(255,255,255,.10);
+      --text:#eef3ff;
+      --muted:#a8b4d8;
+      --accent:#6ea8ff;
+      --accent2:#8d7dff;
+      --danger:#ff8b8b;
+      --ok:#75e7ae;
+      --shadow:0 20px 40px rgba(0,0,0,.35);
+      --radius:22px;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(110,168,255,.18), transparent 35%),
+        radial-gradient(circle at top right, rgba(141,125,255,.16), transparent 30%),
+        linear-gradient(180deg, #070b16 0%, #0b1020 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+
+    .wrap{
+      width:min(1100px, 94vw);
+      margin:24px auto 36px;
+    }
+
+    .hero{
+      background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:var(--shadow);
+      padding:22px;
+      margin-bottom:18px;
+    }
+
+    .title{
+      font-size:32px;
+      font-weight:900;
+      letter-spacing:.04em;
+      margin:0 0 8px;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.8;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:16px;
+      margin-top:22px;
+    }
+
+    .panel{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(3px);
+    }
+
+    label{
+      display:block;
+      font-size:13px;
+      color:var(--muted);
+      margin-bottom:10px;
+    }
+
+    select, input[type="text"]{
+      width:100%;
+      background:#0e1530;
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:16px;
+      padding:16px;
+      font-size:16px;
+      outline:none;
+    }
+
+    .actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    }
+
+    button{
+      border:none;
+      border-radius:18px;
+      padding:16px 22px;
+      font-size:16px;
+      font-weight:900;
+      cursor:pointer;
+      transition:transform .16s ease, opacity .16s ease, filter .16s ease;
+    }
+
+    button:hover{
+      transform:translateY(-1px);
+      filter:brightness(1.04);
+    }
+
+    button:active{
+      transform:translateY(0);
+    }
+
+    button:disabled{
+      opacity:.55;
+      cursor:not-allowed;
+      transform:none;
+      filter:none;
+    }
+
+    .btn-main{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:white;
+    }
+
+    .btn-sub{
+      background:#263979;
+      color:white;
+    }
+
+    .btn-danger{
+      background:#7b2840;
+      color:#ffe1e8;
+    }
+
+    .btn-mic{
+      background:#144c3e;
+      color:#e8fff6;
+    }
+
+    .btn-stop{
+      background:#7b2840;
+      color:#ffe1e8;
+    }
+
+    .btn-speak{
+      background:#20346d;
+      color:#eef3ff;
+    }
+
+    .status{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:14px;
+      min-height:22px;
+    }
+
+    .stage{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .sceneBox{
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+      gap:16px;
+    }
+
+    .sceneTitle{
+      font-size:22px;
+      font-weight:900;
+      margin:0;
+    }
+
+    .mood{
+      display:inline-block;
+      font-size:12px;
+      font-weight:900;
+      padding:8px 12px;
+      border-radius:999px;
+      background:rgba(110,168,255,.16);
+      border:1px solid rgba(110,168,255,.28);
+      color:#d9e8ff;
+      margin-top:6px;
+      text-transform:lowercase;
+    }
+
+    .sceneJa{
+      font-size:28px;
+      line-height:1.5;
+      font-weight:900;
+      letter-spacing:.02em;
+      min-height:120px;
+      display:flex;
+      align-items:center;
+    }
+
+    .sceneEn{
+      font-size:17px;
+      line-height:1.8;
+      color:#dbe7ff;
+      min-height:72px;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+
+    .speakRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .hintRow{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:4px;
+    }
+
+    .hint{
+      background:#162043;
+      border:1px solid rgba(255,255,255,.08);
+      color:#dce7ff;
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:14px;
+      font-weight:800;
+      cursor:pointer;
+    }
+
+    .rightCol{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    textarea{
+      width:100%;
+      min-height:138px;
+      resize:vertical;
+      background:#0e1530;
+      color:var(--text);
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:18px;
+      padding:16px;
+      font-size:19px;
+      line-height:1.7;
+      outline:none;
+    }
+
+    .sendRow{
+      display:flex;
+      gap:12px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+
+    .sendRow button{
+      flex:1;
+      min-width:140px;
+    }
+
+    .history{
+      max-height:360px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      padding-right:2px;
+    }
+
+    .bubble{
+      border-radius:18px;
+      padding:14px 16px;
+      line-height:1.7;
+      font-size:14px;
+      border:1px solid var(--line);
+      white-space:pre-wrap;
+      word-break:break-word;
+    }
+
+    .bubble.user{
+      background:#203261;
+    }
+
+    .bubble.ai{
+      background:#121b37;
+    }
+
+    .bubble .small{
+      display:block;
+      color:var(--muted);
+      font-size:12px;
+      margin-bottom:5px;
+      font-weight:700;
+    }
+
+    .summary{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.8;
+      border-top:1px solid var(--line);
+      padding-top:14px;
+    }
+
+    @media (max-width: 900px){
+      .grid{
+        grid-template-columns:1fr;
+      }
+
+      .stage{
+        grid-template-columns:1fr;
+      }
+
+      .sceneJa{
+        font-size:24px;
+      }
+
+      .sceneEn{
+        font-size:16px;
+      }
+
+      .actions button{
+        width:100%;
+      }
+    }
+  </style>
 </head>
 <body>
-  Dream Step
+  <div class="wrap">
+    <div class="hero">
+      <h1 class="title">Dream Step</h1>
+      <div class="sub">
+        映画の中に入って、短く反応する英会話。<br>
+        正解は1つじゃない。とにかくその場で返す。
+      </div>
+
+      <div class="grid">
+        <div class="panel">
+          <label for="genre">ジャンル</label>
+          <select id="genre">
+            <option>アクション</option>
+            <option>恋愛</option>
+            <option>ミステリー</option>
+            <option>ホラー</option>
+            <option>友情</option>
+            <option>戦い</option>
+          </select>
+        </div>
+
+        <div class="panel">
+          <label for="role">あなたの役</label>
+          <select id="role">
+            <option>主人公</option>
+            <option>仲間</option>
+            <option>刑事</option>
+            <option>生徒</option>
+            <option>戦士</option>
+            <option>目撃者</option>
+          </select>
+        </div>
+
+        <div class="panel">
+          <label for="sessionIdBox">セッションID</label>
+          <input id="sessionIdBox" type="text" placeholder="自動で入ります" />
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn-main" id="startBtn">新しい映画を始める</button>
+        <button class="btn-sub" id="resumeBtn">前回の続き</button>
+        <button class="btn-sub" id="listBtn">履歴を見る</button>
+        <button class="btn-danger" id="resetBtn">この物語を削除</button>
+      </div>
+
+      <div class="status" id="status">準備OK</div>
+    </div>
+
+    <div class="stage">
+      <div class="panel sceneBox">
+        <div>
+          <h2 class="sceneTitle" id="sceneTitle">Scene</h2>
+          <div class="mood" id="mood">ready</div>
+        </div>
+
+        <div class="sceneJa" id="sceneJa">ここに場面が表示されます。</div>
+
+        <div class="sceneEn" id="sceneEn">English will appear here.</div>
+
+        <div class="speakRow">
+          <button class="btn-speak" id="speakAiBtn">🔈 AIの英語</button>
+        </div>
+
+        <div class="hintRow" id="hintRow"></div>
+
+        <div class="summary" id="summary">ここまでの要約がここに出ます。</div>
+      </div>
+
+      <div class="rightCol">
+        <div class="panel">
+          <label for="userInput">あなたの一言</label>
+          <textarea id="userInput" placeholder="例: 逃げろ！ / 右だ！ / 待って！ / I’m here!"></textarea>
+
+          <div class="sendRow">
+            <button class="btn-mic" id="micBtn">🎤 話す</button>
+            <button class="btn-stop" id="stopMicBtn">■ 停止</button>
+          </div>
+
+          <div class="sendRow">
+            <button class="btn-speak" id="speakUserBtn">🔈 自分の英語</button>
+          </div>
+
+          <div class="sendRow">
+            <button class="btn-main" id="sendBtn">返す</button>
+            <button class="btn-sub" id="clearBtn">消す</button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <label>会話ログ</label>
+          <div class="history" id="history"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "https://ai-memory-worker.gudafutanu.workers.dev";
+
+    const els = {
+      genre: document.getElementById("genre"),
+      role: document.getElementById("role"),
+      sessionIdBox: document.getElementById("sessionIdBox"),
+      status: document.getElementById("status"),
+      sceneTitle: document.getElementById("sceneTitle"),
+      mood: document.getElementById("mood"),
+      sceneJa: document.getElementById("sceneJa"),
+      sceneEn: document.getElementById("sceneEn"),
+      hintRow: document.getElementById("hintRow"),
+      summary: document.getElementById("summary"),
+      userInput: document.getElementById("userInput"),
+      history: document.getElementById("history"),
+      startBtn: document.getElementById("startBtn"),
+      resumeBtn: document.getElementById("resumeBtn"),
+      listBtn: document.getElementById("listBtn"),
+      resetBtn: document.getElementById("resetBtn"),
+      sendBtn: document.getElementById("sendBtn"),
+      clearBtn: document.getElementById("clearBtn"),
+      micBtn: document.getElementById("micBtn"),
+      stopMicBtn: document.getElementById("stopMicBtn"),
+      speakAiBtn: document.getElementById("speakAiBtn"),
+      speakUserBtn: document.getElementById("speakUserBtn")
+    };
+
+    let currentSessionId = localStorage.getItem("dreamstep_session_id") || "";
+    let recognition = null;
+    let recognizing = false;
+
+    if (currentSessionId) {
+      els.sessionIdBox.value = currentSessionId;
+    }
+
+    function setStatus(msg) {
+      els.status.textContent = msg;
+    }
+
+    function saveSessionId(id) {
+      currentSessionId = id;
+      els.sessionIdBox.value = id;
+      localStorage.setItem("dreamstep_session_id", id);
+    }
+
+    function resetSceneView() {
+      els.sceneTitle.textContent = "Scene";
+      els.sceneJa.textContent = "ここに場面が表示されます。";
+      els.sceneEn.textContent = "English will appear here.";
+      els.summary.textContent = "ここまでの要約がここに出ます。";
+      els.hintRow.innerHTML = "";
+      els.mood.textContent = "ready";
+    }
+
+    function addBubble(type, text) {
+      const div = document.createElement("div");
+      div.className = "bubble " + type;
+      div.innerHTML = `
+        <span class="small">${type === "user" ? "YOU" : "AI"}</span>
+        ${escapeHtml(text).replace(/\n/g, "<br>")}
+      `;
+      els.history.appendChild(div);
+      els.history.scrollTop = els.history.scrollHeight;
+    }
+
+    function renderScene(data) {
+      els.sceneTitle.textContent = data.title || "Scene";
+      els.mood.textContent = data.mood || "ready";
+      els.sceneJa.textContent = data.scene_ja || "";
+      els.sceneEn.textContent = "";
+      els.summary.textContent = data.summary || "";
+
+      const hints = Array.isArray(data.choices_hint) ? data.choices_hint : [];
+      els.hintRow.innerHTML = "";
+
+      hints.forEach(h => {
+        const b = document.createElement("button");
+        b.className = "hint";
+        b.textContent = h;
+        b.onclick = () => {
+          els.userInput.value = h;
+          els.userInput.focus();
+        };
+        els.hintRow.appendChild(b);
+      });
+
+      setTimeout(() => {
+        els.sceneEn.textContent = data.scene_en || "";
+      }, 500);
+    }
+
+    async function api(path, method = "GET", body = null) {
+      const res = await fetch(API_BASE + path, {
+        method,
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: body ? JSON.stringify(body) : null
+      });
+
+      let data = null;
+      try {
+        data = await res.json();
+      } catch {
+        throw new Error("JSONを読めませんでした");
+      }
+
+      if (!res.ok || !data.ok) {
+        throw new Error(data?.error || "API error");
+      }
+
+      return data;
+    }
+
+    async function startStory() {
+      try {
+        window.speechSynthesis?.cancel();
+        setStatus("映画を読み込み中...");
+        els.history.innerHTML = "";
+
+        const data = await api("/chat", "POST", {
+          sessionId: "",
+          genre: els.genre.value,
+          role: els.role.value,
+          isStart: true
+        });
+
+        saveSessionId(data.sessionId);
+        renderScene(data);
+        addBubble("ai", `${data.scene_ja}\n${data.scene_en}`);
+        setStatus("スタートしました");
+      } catch (e) {
+        setStatus("エラー: " + e.message);
+      }
+    }
+
+    async function sendReply() {
+      const text = els.userInput.value.trim();
+
+      if (!text) {
+        setStatus("一言入れてください");
+        return;
+      }
+
+      if (!currentSessionId) {
+        setStatus("先に『新しい映画を始める』を押してください");
+        return;
+      }
+
+      try {
+        window.speechSynthesis?.cancel();
+        setStatus("続きを生成中...");
+        addBubble("user", text);
+
+        const data = await api("/chat", "POST", {
+          sessionId: currentSessionId,
+          genre: els.genre.value,
+          role: els.role.value,
+          isStart: false,
+          userInput: text
+        });
+
+        renderScene(data);
+        addBubble("ai", `${data.scene_ja}\n${data.scene_en}`);
+        els.userInput.value = "";
+        setStatus("次の場面が出ました");
+      } catch (e) {
+        setStatus("エラー: " + e.message);
+      }
+    }
+
+    async function resumeStory() {
+      const targetId = els.sessionIdBox.value.trim() || currentSessionId;
+
+      if (!targetId) {
+        setStatus("セッションIDがありません");
+        return;
+      }
+
+      try {
+        window.speechSynthesis?.cancel();
+        setStatus("前回の続きを読み込み中...");
+        const data = await api("/resume", "POST", { sessionId: targetId });
+
+        saveSessionId(targetId);
+        els.genre.value = data.session.genre || "アクション";
+        els.role.value = data.session.role || "主人公";
+        els.history.innerHTML = "";
+
+        const msgs = data.messages || [];
+        let lastAi = null;
+
+        msgs.forEach(m => {
+          if (m.speaker === "user") {
+            addBubble("user", m.raw_text || "");
+          } else if (m.speaker === "assistant") {
+            addBubble("ai", `${m.ja_text || ""}\n${m.en_text || ""}`);
+            lastAi = m;
+          }
+        });
+
+        els.sceneTitle.textContent = data.session.title || "Scene";
+        els.summary.textContent = data.session.summary || "";
+
+        if (lastAi) {
+          els.sceneJa.textContent = lastAi.ja_text || "";
+          els.sceneEn.textContent = lastAi.en_text || "";
+          els.mood.textContent = "resumed";
+        } else {
+          resetSceneView();
+        }
+
+        setStatus("前回の続きを開きました");
+      } catch (e) {
+        setStatus("エラー: " + e.message);
+      }
+    }
+
+    async function listSessions() {
+      try {
+        setStatus("履歴を取得中...");
+        const data = await api("/sessions", "GET");
+        const arr = data.sessions || [];
+
+        if (!arr.length) {
+          setStatus("保存された物語はまだありません");
+          return;
+        }
+
+        els.history.innerHTML = "";
+
+        arr.forEach(s => {
+          const div = document.createElement("div");
+          div.className = "bubble ai";
+          div.style.cursor = "pointer";
+          div.innerHTML = `
+            <span class="small">${escapeHtml(s.updated_at || "")}</span>
+            <strong>${escapeHtml(s.title || "Scene")}</strong><br>
+            ${escapeHtml((s.genre || "") + " / " + (s.role || ""))}<br>
+            <span style="color:#a8b4d8">${escapeHtml(s.summary || "")}</span>
+          `;
+          div.onclick = () => {
+            saveSessionId(s.id);
+            els.genre.value = s.genre || "アクション";
+            els.role.value = s.role || "主人公";
+            setStatus("このセッションを選びました。『前回の続き』を押してください");
+          };
+          els.history.appendChild(div);
+        });
+
+        setStatus("履歴を表示しました");
+      } catch (e) {
+        setStatus("エラー: " + e.message);
+      }
+    }
+
+    async function resetStory() {
+      const targetId = els.sessionIdBox.value.trim() || currentSessionId;
+
+      if (!targetId) {
+        setStatus("削除するセッションがありません");
+        return;
+      }
+
+      if (!confirm("この物語を削除しますか？")) return;
+
+      try {
+        window.speechSynthesis?.cancel();
+        setStatus("削除中...");
+        await api("/reset", "POST", { sessionId: targetId });
+
+        if (targetId === currentSessionId) {
+          localStorage.removeItem("dreamstep_session_id");
+          currentSessionId = "";
+        }
+
+        els.sessionIdBox.value = "";
+        els.history.innerHTML = "";
+        els.userInput.value = "";
+        resetSceneView();
+        setStatus("削除しました");
+      } catch (e) {
+        setStatus("エラー: " + e.message);
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function speakEnglish(text) {
+      const t = String(text || "").trim();
+
+      if (!t) {
+        setStatus("読み上げる英語がありません");
+        return;
+      }
+
+      if (!("speechSynthesis" in window)) {
+        setStatus("このブラウザは読み上げに未対応です");
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+
+      const utter = new SpeechSynthesisUtterance(t);
+      utter.lang = "en-US";
+      utter.rate = 0.92;
+      utter.pitch = 1.0;
+      utter.volume = 1.0;
+
+      const voices = window.speechSynthesis.getVoices();
+      const enVoice =
+        voices.find(v => v.lang === "en-US") ||
+        voices.find(v => v.lang && v.lang.startsWith("en")) ||
+        null;
+
+      if (enVoice) {
+        utter.voice = enVoice;
+      }
+
+      utter.onstart = () => {
+        setStatus("英語を読み上げ中...");
+      };
+
+      utter.onend = () => {
+        setStatus("読み上げが終わりました");
+      };
+
+      utter.onerror = () => {
+        setStatus("読み上げでエラーが起きました");
+      };
+
+      window.speechSynthesis.speak(utter);
+    }
+
+    function setupMic() {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+      if (!SpeechRecognition) {
+        setStatus("このブラウザはマイク入力に未対応です。文字入力で使ってください。");
+        els.micBtn.disabled = true;
+        els.stopMicBtn.disabled = true;
+        return;
+      }
+
+      recognition = new SpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.interimResults = true;
+      recognition.continuous = false;
+      recognition.maxAlternatives = 1;
+
+      recognition.onstart = () => {
+        recognizing = true;
+        setStatus("聞き取り中… 英語で話してください");
+      };
+
+      recognition.onresult = (event) => {
+        let transcript = "";
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        els.userInput.value = transcript.trim();
+      };
+
+      recognition.onerror = (event) => {
+        recognizing = false;
+        setStatus("マイクエラー: " + event.error);
+      };
+
+      recognition.onend = () => {
+        recognizing = false;
+        if (els.userInput.value.trim()) {
+          setStatus("聞き取り完了。内容を確認して『返す』を押してください");
+        } else {
+          setStatus("聞き取れませんでした。もう一度どうぞ");
+        }
+      };
+    }
+
+    els.startBtn.onclick = startStory;
+    els.sendBtn.onclick = sendReply;
+    els.resumeBtn.onclick = resumeStory;
+    els.listBtn.onclick = listSessions;
+    els.resetBtn.onclick = resetStory;
+
+    els.clearBtn.onclick = () => {
+      els.userInput.value = "";
+      els.userInput.focus();
+      setStatus("入力を消しました");
+    };
+
+    els.micBtn.onclick = () => {
+      if (!recognition) {
+        setupMic();
+      }
+
+      if (!recognition) return;
+
+      try {
+        els.userInput.value = "";
+        recognition.start();
+      } catch (e) {
+        setStatus("マイク開始エラー: " + e.message);
+      }
+    };
+
+    els.stopMicBtn.onclick = () => {
+      if (recognition && recognizing) {
+        recognition.stop();
+        setStatus("マイク停止");
+      }
+    };
+
+    els.speakAiBtn.onclick = () => {
+      speakEnglish(els.sceneEn.textContent);
+    };
+
+    els.speakUserBtn.onclick = () => {
+      speakEnglish(els.userInput.value);
+    };
+
+    els.userInput.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        sendReply();
+      }
+    });
+
+    if ("speechSynthesis" in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+
+    setupMic();
+
+    if (currentSessionId) {
+      setStatus("前回のセッションIDを読み込みました");
+    }
+  </script>
 </body>
 </html>
