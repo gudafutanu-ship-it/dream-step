@@ -2,147 +2,394 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Dream Step Final</title>
-
 <style>
-body{
-  margin:0;
-  background:#111;
-  color:white;
-  font-family:sans-serif;
-  text-align:center;
-}
-.container{padding:15px;}
-.card{
-  background:#222;
-  padding:15px;
-  margin:10px;
-  border-radius:15px;
-}
-button{
-  padding:12px;
-  margin:5px;
-  width:90%;
-  font-size:16px;
-  border:none;
-  border-radius:10px;
-}
-.mic{background:red;color:white;}
-.next{background:green;color:white;}
-.speak{width:50px;font-size:20px;}
-.hidden{display:none;}
+  * { box-sizing: border-box; }
+
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:linear-gradient(180deg,#0a0d16 0%, #121826 55%, #090b12 100%);
+    color:#fff;
+    min-height:100vh;
+  }
+
+  .wrap{
+    max-width:760px;
+    margin:0 auto;
+    padding:18px 14px 28px;
+  }
+
+  .title{
+    text-align:center;
+    font-size:28px;
+    font-weight:900;
+    margin:6px 0 18px;
+  }
+
+  .card{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.10);
+    border-radius:22px;
+    padding:16px;
+    margin-bottom:14px;
+  }
+
+  .hidden{display:none !important;}
+
+  .label{
+    font-size:13px;
+    color:#c6cfdf;
+    margin-bottom:10px;
+    text-align:left;
+    font-weight:700;
+  }
+
+  input, button{
+    font:inherit;
+  }
+
+  input{
+    width:100%;
+    padding:14px 16px;
+    border:none;
+    border-radius:16px;
+    font-size:16px;
+    margin-bottom:10px;
+  }
+
+  button{
+    border:none;
+    border-radius:18px;
+    padding:15px 16px;
+    font-size:18px;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  .btn-main{
+    width:100%;
+    background:linear-gradient(135deg,#ff7a45,#ff9a56);
+    color:#fff;
+  }
+
+  .btn-mic{
+    width:100%;
+    background:linear-gradient(135deg,#ff3d64,#ff5e7d);
+    color:#fff;
+  }
+
+  .btn-next{
+    width:100%;
+    background:linear-gradient(135deg,#21a84a,#36c85f);
+    color:#fff;
+  }
+
+  .line-row{
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+  }
+
+  .line-main{
+    flex:1;
+    min-width:0;
+  }
+
+  .speak-btn{
+    width:56px;
+    min-width:56px;
+    height:56px;
+    border-radius:16px;
+    background:linear-gradient(135deg,#334c7c,#4667a3);
+    color:#fff;
+    font-size:24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+  }
+
+  .scene-en{
+    font-size:31px;
+    font-weight:900;
+    line-height:1.28;
+    text-align:left;
+    word-break:break-word;
+  }
+
+  .scene-ja{
+    margin-top:12px;
+    font-size:16px;
+    color:#d7dde7;
+    line-height:1.7;
+    text-align:left;
+  }
+
+  .reply-box{
+    background:rgba(80,255,220,0.08);
+    border:1px solid rgba(80,255,220,0.18);
+    border-radius:18px;
+    padding:14px;
+  }
+
+  .reply-en{
+    font-size:32px;
+    font-weight:900;
+    line-height:1.28;
+    text-align:left;
+    color:#9bf6e6;
+    word-break:break-word;
+  }
+
+  .reply-ja{
+    margin-top:12px;
+    font-size:16px;
+    color:#d8f4ef;
+    line-height:1.7;
+    text-align:left;
+  }
+
+  .status{
+    min-height:24px;
+    margin-top:10px;
+    text-align:center;
+    color:#cbd3e3;
+    font-size:14px;
+  }
+
+  .result{
+    text-align:left;
+    line-height:1.8;
+    font-size:15px;
+    color:#eef2f8;
+  }
+
+  .score{
+    font-size:34px;
+    font-weight:900;
+    color:#ffe28a;
+    text-align:center;
+    margin-bottom:10px;
+  }
+
+  @media (max-width: 480px){
+    .title{font-size:24px;}
+    .scene-en,.reply-en{font-size:24px;}
+  }
 </style>
 </head>
-
 <body>
+<div class="wrap">
+  <div class="title">🎬 Dream Step Final</div>
 
-<div class="container">
+  <div id="passBox" class="card">
+    <div class="label">パスコードを入力</div>
+    <input id="code" type="password" placeholder="パスコード">
+    <button class="btn-main" onclick="login()">入る</button>
+    <div id="passStatus" class="status"></div>
+  </div>
 
-<h2>🎬 Dream Step Final</h2>
+  <div id="app" class="hidden">
 
-<div id="pass">
-<input id="code" placeholder="パスコード">
-<button onclick="login()">入る</button>
-</div>
+    <div class="card">
+      <div class="label">映画の一言</div>
+      <div class="line-row">
+        <div class="line-main">
+          <div id="scene" class="scene-en">Loading...</div>
+        </div>
+        <button class="speak-btn" onclick="speak(sceneText)">📣</button>
+      </div>
+      <div id="scene_ja" class="scene-ja">読み込み中...</div>
+    </div>
 
-<div id="app" class="hidden">
+    <div class="card">
+      <div class="label">理想の返し</div>
+      <div class="reply-box">
+        <div class="line-row">
+          <div class="line-main">
+            <div id="reply" class="reply-en">Loading...</div>
+          </div>
+          <button class="speak-btn" onclick="speak(replyText)">📣</button>
+        </div>
+        <div id="reply_ja" class="reply-ja">読み込み中...</div>
+      </div>
+    </div>
 
-<div class="card">
-<div id="scene"></div>
-<div id="scene_ja"></div>
-<button class="speak" onclick="speak(sceneText)">📣</button>
-</div>
+    <div class="card">
+      <button class="btn-mic" onclick="rec()">🎤 話す</button>
+      <div id="micStatus" class="status">理想の返しを読んでみましょう</div>
+    </div>
 
-<div class="card">
-<div id="reply"></div>
-<div id="reply_ja"></div>
-<button class="speak" onclick="speak(replyText)">📣</button>
-</div>
+    <div class="card">
+      <div class="label">AI評価</div>
+      <div id="result" class="result">まだ評価はありません。</div>
+    </div>
 
-<button class="mic" onclick="rec()">🎤 話す</button>
-
-<div id="result"></div>
-
-<button class="next" onclick="load()">▶ 次へ</button>
-
-</div>
-
+    <div class="card">
+      <button class="btn-next" onclick="loadScene()">▶ 次へ</button>
+    </div>
+  </div>
 </div>
 
 <script>
+const URL = "https://ai-memory-worker.gudafutanu.workers.dev";
 
-const URL="https://ai-memory-worker.gudafutanu.workers.dev";
+let sceneText = "";
+let replyText = "";
 
-let sceneText="";
-let replyText="";
+async function login() {
+  const code = document.getElementById("code").value.trim();
+  const passStatus = document.getElementById("passStatus");
 
-async function login(){
- const code=document.getElementById("code").value;
+  if (!code) {
+    passStatus.textContent = "パスコードを入力してください。";
+    return;
+  }
 
- const res=await fetch(URL+"/check-passcode",{
-  method:"POST",
-  headers:{"Content-Type":"application/json"},
-  body:JSON.stringify({code})
- });
+  passStatus.textContent = "確認中...";
 
- const data=await res.json();
+  try {
+    const res = await fetch(URL + "/check-passcode", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ code })
+    });
 
- if(data.ok){
-  document.getElementById("pass").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-  load();
- }else{
-  alert("パスコード違い");
- }
+    const data = await res.json();
+
+    if (data.ok) {
+      document.getElementById("passBox").classList.add("hidden");
+      document.getElementById("app").classList.remove("hidden");
+      passStatus.textContent = "";
+      loadScene();
+    } else {
+      passStatus.textContent = "パスコードが違うか、期限切れです。";
+    }
+  } catch (e) {
+    passStatus.textContent = "接続エラーです。Worker URLを確認してください。";
+  }
 }
 
-async function load(){
- const res=await fetch(URL+"/generate",{method:"POST"});
- const data=await res.json();
+async function loadScene() {
+  document.getElementById("scene").textContent = "Loading...";
+  document.getElementById("scene_ja").textContent = "読み込み中...";
+  document.getElementById("reply").textContent = "Loading...";
+  document.getElementById("reply_ja").textContent = "読み込み中...";
+  document.getElementById("result").textContent = "まだ評価はありません。";
+  document.getElementById("micStatus").textContent = "新しい会話を作っています...";
 
- sceneText=data.scene_en;
- replyText=data.reply_en;
+  try {
+    const res = await fetch(URL + "/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }
+    });
 
- document.getElementById("scene").innerText=data.scene_en;
- document.getElementById("scene_ja").innerText=data.scene_ja;
- document.getElementById("reply").innerText=data.reply_en;
- document.getElementById("reply_ja").innerText=data.reply_ja;
- document.getElementById("result").innerText="";
+    const data = await res.json();
+
+    sceneText = data.scene_en || "You look tired. Long day?";
+    replyText = data.reply_en || "Yeah, a little. I just need some rest.";
+
+    document.getElementById("scene").textContent = sceneText;
+    document.getElementById("scene_ja").textContent = data.scene_ja || "疲れてるみたいだね。長い一日だった？";
+    document.getElementById("reply").textContent = replyText;
+    document.getElementById("reply_ja").textContent = data.reply_ja || "うん、ちょっとね。少し休めば大丈夫だよ。";
+    document.getElementById("micStatus").textContent = "理想の返しを読んでみましょう";
+  } catch (e) {
+    sceneText = "Is everything okay? You seem quiet today.";
+    replyText = "I'm okay. I just have a lot on my mind.";
+
+    document.getElementById("scene").textContent = sceneText;
+    document.getElementById("scene_ja").textContent = "大丈夫？今日は少し静かだね。";
+    document.getElementById("reply").textContent = replyText;
+    document.getElementById("reply_ja").textContent = "大丈夫だよ。ちょっと考えごとが多くて。";
+    document.getElementById("micStatus").textContent = "接続エラーのため、予備の会話を表示しています。";
+  }
 }
 
-function speak(text){
- const u=new SpeechSynthesisUtterance(text);
- u.lang="en-US";
- speechSynthesis.speak(u);
+function speak(text) {
+  const t = String(text || "").trim();
+  if (!t) return;
+
+  if (!("speechSynthesis" in window)) {
+    document.getElementById("micStatus").textContent = "このブラウザでは読み上げが使えません。";
+    return;
+  }
+
+  try { window.speechSynthesis.cancel(); } catch (e) {}
+
+  const u = new SpeechSynthesisUtterance(t);
+  u.lang = "en-US";
+  u.rate = 0.92;
+  u.pitch = 1.0;
+  u.volume = 1.0;
+  window.speechSynthesis.speak(u);
 }
 
-function rec(){
- const r=new webkitSpeechRecognition();
- r.lang="en-US";
+function rec() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
- r.onresult=async(e)=>{
-  const text=e.results[0][0].transcript;
+  if (!SpeechRecognition) {
+    document.getElementById("micStatus").textContent = "このブラウザでは音声認識が使えません。";
+    return;
+  }
 
-  const res=await fetch(URL+"/score",{
-   method:"POST",
-   headers:{"Content-Type":"application/json"},
-   body:JSON.stringify({text,target:replyText})
-  });
+  if (!replyText) {
+    document.getElementById("micStatus").textContent = "まだ会話がありません。";
+    return;
+  }
 
-  const data=await res.json();
+  const r = new SpeechRecognition();
+  r.lang = "en-US";
+  r.interimResults = false;
+  r.maxAlternatives = 1;
 
-  document.getElementById("result").innerHTML=
-   "⭐ "+data.score+"点<br>"+
-   "👍 "+data.good.join(", ")+"<br>"+
-   "⚠ "+data.improve.join(", ")+"<br>"+
-   "💡 "+data.example;
- };
+  r.onstart = () => {
+    document.getElementById("micStatus").textContent = "英語を読んでください...";
+  };
 
- r.start();
+  r.onresult = async (e) => {
+    const text = e.results[0][0].transcript;
+    document.getElementById("micStatus").textContent = "採点中...";
+
+    try {
+      const res = await fetch(URL + "/score", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, target: replyText })
+      });
+
+      const data = await res.json();
+
+      const good = Array.isArray(data.good) ? data.good.map(v => "・" + v).join("<br>") : "・はっきり読めています";
+      const improve = Array.isArray(data.improve) ? data.improve.map(v => "・" + v).join("<br>") : "・もう一度読んでみましょう";
+
+      document.getElementById("result").innerHTML = `
+        <div class="score">${data.score ?? 80}点</div>
+        <strong>良い点</strong><br>${good}<br><br>
+        <strong>改善</strong><br>${improve}<br><br>
+        <strong>おすすめ</strong><br>${data.example || replyText}
+      `;
+
+      document.getElementById("micStatus").textContent = "もう一度話すか、次へ進めます。";
+    } catch (err) {
+      document.getElementById("result").innerHTML = `
+        <div class="score">80点</div>
+        <strong>良い点</strong><br>・最後まで言えています<br><br>
+        <strong>改善</strong><br>・もう少しゆっくり読んでみましょう<br><br>
+        <strong>おすすめ</strong><br>${replyText}
+      `;
+      document.getElementById("micStatus").textContent = "採点で接続エラーがありました。";
+    }
+  };
+
+  r.onerror = (e) => {
+    document.getElementById("micStatus").textContent = "音声認識エラー: " + (e.error || "unknown");
+  };
+
+  r.start();
 }
-
 </script>
-
 </body>
 </html>
