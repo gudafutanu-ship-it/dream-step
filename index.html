@@ -1,683 +1,148 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Dream Step</title>
-  <style>
-    * { box-sizing: border-box; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Step Final</title>
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        linear-gradient(180deg, #0f0f12 0%, #171a24 55%, #0d0d10 100%);
-      color: #fff;
-      min-height: 100vh;
-    }
-
-    .wrap {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 16px 14px 28px;
-    }
-
-    .title {
-      text-align: center;
-      font-size: 28px;
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      margin: 8px 0 6px;
-    }
-
-    .subtitle {
-      text-align: center;
-      color: #c9ced8;
-      font-size: 13px;
-      margin-bottom: 14px;
-    }
-
-    .card {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      border-radius: 18px;
-      padding: 14px;
-      margin-bottom: 12px;
-      backdrop-filter: blur(8px);
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    .label {
-      font-size: 12px;
-      color: #bfc7d7;
-      margin-bottom: 6px;
-      text-align: left;
-      letter-spacing: 0.03em;
-    }
-
-    .row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-
-    select, input, button {
-      font: inherit;
-    }
-
-    select, input {
-      width: 100%;
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: none;
-      outline: none;
-      background: #fff;
-      color: #111;
-      font-size: 16px;
-    }
-
-    button {
-      border: none;
-      border-radius: 16px;
-      padding: 14px 16px;
-      cursor: pointer;
-      font-weight: 700;
-      font-size: 16px;
-      transition: transform 0.06s ease, opacity 0.2s ease, filter 0.2s ease;
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: default;
-    }
-
-    .btn-main {
-      width: 100%;
-      background: linear-gradient(135deg, #ff6b4a, #ff934a);
-      color: #fff;
-      box-shadow: 0 8px 24px rgba(255, 120, 74, 0.25);
-    }
-
-    .btn-sub {
-      width: 100%;
-      background: linear-gradient(135deg, #3f68ff, #5d8bff);
-      color: #fff;
-      box-shadow: 0 8px 24px rgba(70, 110, 255, 0.22);
-    }
-
-    .btn-dark {
-      width: 100%;
-      background: linear-gradient(135deg, #21283a, #33415f);
-      color: #fff;
-    }
-
-    .btn-mic {
-      width: 100%;
-      background: linear-gradient(135deg, #ff3b5f, #ff6b6b);
-      color: #fff;
-      box-shadow: 0 8px 24px rgba(255, 59, 95, 0.22);
-      font-size: 18px;
-    }
-
-    .btn-mic.listening {
-      background: linear-gradient(135deg, #7b1fa2, #c2185b);
-    }
-
-    .scene-title {
-      font-size: 17px;
-      font-weight: 800;
-      color: #ffe082;
-      margin-bottom: 10px;
-      text-align: left;
-    }
-
-    .line-row {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    .line-main {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .speak-btn {
-      width: 52px;
-      min-width: 52px;
-      height: 52px;
-      padding: 0;
-      border-radius: 14px;
-      font-size: 24px;
-      background: linear-gradient(135deg, #26344f, #445d89);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 6px 18px rgba(60, 90, 150, 0.22);
-    }
-
-    .speak-btn.playing {
-      background: linear-gradient(135deg, #ff8a00, #ffb347);
-      color: #fff;
-    }
-
-    .line-en {
-      font-size: 25px;
-      font-weight: 800;
-      line-height: 1.35;
-      text-align: left;
-      word-break: break-word;
-    }
-
-    .line-ja {
-      margin-top: 8px;
-      color: #d7dbe3;
-      font-size: 15px;
-      line-height: 1.6;
-      text-align: left;
-    }
-
-    .your-line-box {
-      background: rgba(0, 255, 210, 0.08);
-      border: 1px solid rgba(0,255,210,0.16);
-      border-radius: 16px;
-      padding: 12px;
-    }
-
-    .your-line-en {
-      font-size: 28px;
-      font-weight: 900;
-      line-height: 1.35;
-      color: #9fffe9;
-      text-align: left;
-      word-break: break-word;
-    }
-
-    .your-line-ja {
-      margin-top: 8px;
-      color: #cfeee8;
-      font-size: 15px;
-      text-align: left;
-      line-height: 1.6;
-    }
-
-    .tip {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #ffd7a8;
-      text-align: left;
-    }
-
-    .status {
-      min-height: 24px;
-      font-size: 14px;
-      color: #cfd6e6;
-      text-align: center;
-      margin-top: 4px;
-    }
-
-    .score-big {
-      font-size: 34px;
-      font-weight: 900;
-      margin-bottom: 10px;
-      color: #ffe082;
-      text-align: center;
-    }
-
-    .feedback-block {
-      text-align: left;
-      line-height: 1.8;
-      font-size: 15px;
-      color: #eef2f8;
-    }
-
-    .feedback-block strong {
-      color: #9ed0ff;
-    }
-
-    .recognized {
-      margin-top: 10px;
-      padding: 10px;
-      border-radius: 12px;
-      background: rgba(255,255,255,0.06);
-      color: #d7dde8;
-      word-break: break-word;
-    }
-
-    .footer-note {
-      text-align: center;
-      color: #9aa3b5;
-      font-size: 12px;
-      margin-top: 10px;
-    }
-
-    @media (max-width: 480px) {
-      .title { font-size: 24px; }
-      .line-en { font-size: 22px; }
-      .your-line-en { font-size: 24px; }
-      .speak-btn {
-        width: 48px;
-        min-width: 48px;
-        height: 48px;
-        font-size: 22px;
-      }
-    }
-  </style>
+<style>
+body{
+  margin:0;
+  background:#111;
+  color:white;
+  font-family:sans-serif;
+  text-align:center;
+}
+.container{padding:15px;}
+.card{
+  background:#222;
+  padding:15px;
+  margin:10px;
+  border-radius:15px;
+}
+button{
+  padding:12px;
+  margin:5px;
+  width:90%;
+  font-size:16px;
+  border:none;
+  border-radius:10px;
+}
+.mic{background:red;color:white;}
+.next{background:green;color:white;}
+.speak{width:50px;font-size:20px;}
+.hidden{display:none;}
+</style>
 </head>
+
 <body>
-  <div class="wrap">
-    <div class="title">🎬 Dream Step</div>
-    <div class="subtitle">映画の中に入って、英語を演じる</div>
-
-    <div id="passScreen" class="card">
-      <div class="label">パスコードを入力</div>
-      <div class="row" style="margin-bottom:10px;">
-        <input id="passcodeInput" type="password" placeholder="パスコード">
-      </div>
-      <button class="btn-main" onclick="checkPasscode()">入る</button>
-      <div id="passStatus" class="status"></div>
-    </div>
-
-    <div id="appScreen" class="hidden">
-      <div class="card">
-        <div class="label">シーンを選ぶ</div>
-        <select id="sceneSelect">
-          <option value="アクション">アクション</option>
-          <option value="恋愛">恋愛</option>
-          <option value="ミステリー">ミステリー</option>
-          <option value="ホラー">ホラー</option>
-          <option value="友情">友情</option>
-        </select>
-      </div>
-
-      <div class="card">
-        <button class="btn-sub" onclick="generateScene()">🎞 新しいシーンを作る</button>
-        <div id="generateStatus" class="status"></div>
-      </div>
-
-      <div class="card">
-        <div class="label">映画のセリフ</div>
-        <div id="sceneTitle" class="scene-title">シーンを作成してください</div>
-
-        <div class="line-row">
-          <div class="line-main">
-            <div id="heroEn" class="line-en">Hero: ...</div>
-          </div>
-          <button id="heroSpeakBtn" class="speak-btn" onclick="speakHeroLine()" aria-label="主役のセリフを読む">📣</button>
-        </div>
-
-        <div id="heroJa" class="line-ja">日本語: ...</div>
-      </div>
-
-      <div class="card">
-        <div class="label">あなたのセリフ</div>
-        <div class="your-line-box">
-          <div class="line-row">
-            <div class="line-main">
-              <div id="playerEn" class="your-line-en">Your Line: ...</div>
-            </div>
-            <button id="playerSpeakBtn" class="speak-btn" onclick="speakPlayerLine()" aria-label="自分のセリフを読む">📣</button>
-          </div>
-
-          <div id="playerJa" class="your-line-ja">日本語: ...</div>
-          <div id="tipJa" class="tip">演技のコツ: ...</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <button id="micBtn" class="btn-mic" onclick="startRecognition()">🎤 話す</button>
-        <div id="micStatus" class="status">英語のセリフをそのまま読んでみよう</div>
-      </div>
-
-      <div class="card">
-        <div class="label">AI評価</div>
-        <div id="resultArea" class="feedback-block">まだ評価はありません。</div>
-      </div>
-
-      <div class="card">
-        <button class="btn-dark" onclick="generateScene()">▶ 次へ</button>
-      </div>
-
-      <div class="footer-note">
-        読むだけでOK。自分で英語を作らなくて大丈夫です。
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const WORKER_URL = "https://ai-memory-worker.gudafutanu.workers.dev";
-
-    let currentSceneGenre = "";
-    let currentTargetLine = "";
-    let currentHeroLine = "";
-    let recognition = null;
-    let isListening = false;
-    let speechVoices = [];
-    let activeSpeakButton = null;
-
-    function setText(id, text) {
-      document.getElementById(id).textContent = text;
-    }
-
-    function setHTML(id, html) {
-      document.getElementById(id).innerHTML = html;
-    }
-
-    function escapeHtml(str) {
-      return String(str)
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    function setMicListening(on) {
-      const btn = document.getElementById("micBtn");
-      if (on) {
-        btn.classList.add("listening");
-        btn.textContent = "🎤 聞いています...";
-      } else {
-        btn.classList.remove("listening");
-        btn.textContent = "🎤 話す";
-      }
-    }
-
-    function setSpeakButtonState(buttonId, playing) {
-      const btn = document.getElementById(buttonId);
-      if (!btn) return;
-      if (playing) {
-        btn.classList.add("playing");
-      } else {
-        btn.classList.remove("playing");
-      }
-    }
-
-    function clearSpeakButtons() {
-      setSpeakButtonState("heroSpeakBtn", false);
-      setSpeakButtonState("playerSpeakBtn", false);
-      activeSpeakButton = null;
-    }
-
-    function loadVoices() {
-      speechVoices = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
-    }
-
-    function pickEnglishVoice() {
-      if (!speechVoices || speechVoices.length === 0) return null;
-
-      const exactNames = [
-        "Samantha",
-        "Aaron",
-        "Daniel",
-        "Karen",
-        "Moira",
-        "Alex"
-      ];
-
-      for (const name of exactNames) {
-        const found = speechVoices.find(v => v.name === name && /^en/i.test(v.lang));
-        if (found) return found;
-      }
-
-      const englishPreferred = speechVoices.find(v =>
-        /^en-US/i.test(v.lang) || /^en-GB/i.test(v.lang)
-      );
-      if (englishPreferred) return englishPreferred;
-
-      const anyEnglish = speechVoices.find(v => /^en/i.test(v.lang));
-      if (anyEnglish) return anyEnglish;
-
-      return null;
-    }
-
-    function speakText(text, buttonId) {
-      const clean = String(text || "").trim();
-      if (!clean) return;
-
-      if (!("speechSynthesis" in window)) {
-        setText("micStatus", "このブラウザでは読み上げが使えません。");
-        return;
-      }
-
-      try {
-        window.speechSynthesis.cancel();
-      } catch (e) {}
-
-      clearSpeakButtons();
-      activeSpeakButton = buttonId;
-      setSpeakButtonState(buttonId, true);
-
-      const utter = new SpeechSynthesisUtterance(clean);
-      const voice = pickEnglishVoice();
-
-      utter.lang = voice?.lang || "en-US";
-      if (voice) utter.voice = voice;
-
-      utter.rate = 0.92;
-      utter.pitch = 1.02;
-      utter.volume = 1;
-
-      utter.onend = () => {
-        clearSpeakButtons();
-      };
-
-      utter.onerror = () => {
-        clearSpeakButtons();
-        setText("micStatus", "読み上げに失敗しました。もう一度押してください。");
-      };
-
-      window.speechSynthesis.speak(utter);
-    }
-
-    function speakHeroLine() {
-      speakText(currentHeroLine, "heroSpeakBtn");
-    }
-
-    function speakPlayerLine() {
-      speakText(currentTargetLine, "playerSpeakBtn");
-    }
-
-    async function checkPasscode() {
-      const code = document.getElementById("passcodeInput").value.trim();
-      const passStatus = document.getElementById("passStatus");
-
-      if (!code) {
-        passStatus.textContent = "パスコードを入れてください。";
-        return;
-      }
-
-      passStatus.textContent = "確認中...";
-
-      try {
-        const res = await fetch(WORKER_URL + "/check-passcode", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ code })
-        });
-
-        const data = await res.json();
-
-        if (data.ok) {
-          document.getElementById("passScreen").classList.add("hidden");
-          document.getElementById("appScreen").classList.remove("hidden");
-          passStatus.textContent = "";
-          generateScene();
-        } else {
-          passStatus.textContent = "パスコードが違うか、期限切れです。";
-        }
-      } catch (e) {
-        passStatus.textContent = "接続エラーです。Worker URLを確認してください。";
-      }
-    }
-
-    async function generateScene() {
-      const scene = document.getElementById("sceneSelect").value;
-      currentSceneGenre = scene;
-
-      try {
-        window.speechSynthesis.cancel();
-      } catch (e) {}
-      clearSpeakButtons();
-
-      setText("generateStatus", "AIが映画シーンを作っています...");
-      setText("sceneTitle", "シーン作成中...");
-      setText("heroEn", "Hero: ...");
-      setText("heroJa", "日本語: ...");
-      setText("playerEn", "Your Line: ...");
-      setText("playerJa", "日本語: ...");
-      setText("tipJa", "演技のコツ: ...");
-      setHTML("resultArea", "まだ評価はありません。");
-      setText("micStatus", "英語のセリフをそのまま読んでみよう");
-
-      currentTargetLine = "";
-      currentHeroLine = "";
-
-      try {
-        const res = await fetch(WORKER_URL + "/generate-scene", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ scene })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok || data.error) {
-          setText("generateStatus", "シーン生成に失敗しました。");
-          setText("sceneTitle", "エラー");
-          setText("heroEn", "Hero: Could not generate scene.");
-          setText("heroJa", "日本語: シーン生成に失敗しました。");
-          setText("playerEn", "Your Line: Try again.");
-          setText("playerJa", "日本語: もう一度試してください。");
-          setText("tipJa", "演技のコツ: もう一度「新しいシーンを作る」を押してみよう");
-          return;
-        }
-
-        const heroLine = data.hero_en || "";
-        const playerLine = data.player_en || "";
-
-        currentHeroLine = heroLine;
-        currentTargetLine = playerLine;
-
-        setText("sceneTitle", data.title || (scene + "シーン"));
-        setText("heroEn", "Hero: " + heroLine);
-        setText("heroJa", "日本語: " + (data.hero_ja || ""));
-        setText("playerEn", "Your Line: " + playerLine);
-        setText("playerJa", "日本語: " + (data.player_ja || ""));
-        setText("tipJa", "演技のコツ: " + (data.tip_ja || "感情をこめて読んでみよう"));
-        setText("generateStatus", "新しいシーンができました。");
-      } catch (e) {
-        setText("generateStatus", "接続エラーです。");
-      }
-    }
-
-    function startRecognition() {
-      if (!currentTargetLine) {
-        setText("micStatus", "先にシーンを作ってください。");
-        return;
-      }
-
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (!SpeechRecognition) {
-        setText("micStatus", "このブラウザでは音声認識が使えません。");
-        return;
-      }
-
-      if (isListening && recognition) {
-        try { recognition.stop(); } catch (e) {}
-        return;
-      }
-
-      recognition = new SpeechRecognition();
-      recognition.lang = "en-US";
-      recognition.interimResults = false;
-      recognition.maxAlternatives = 1;
-
-      recognition.onstart = () => {
-        isListening = true;
-        setMicListening(true);
-        setText("micStatus", "英語を読んでください...");
-      };
-
-      recognition.onresult = async (event) => {
-        const text = event.results?.[0]?.[0]?.transcript || "";
-        setText("micStatus", "採点中...");
-        await scoreSpeech(text);
-      };
-
-      recognition.onerror = (event) => {
-        isListening = false;
-        setMicListening(false);
-        setText("micStatus", "音声認識エラー: " + (event.error || "unknown"));
-      };
-
-      recognition.onend = () => {
-        isListening = false;
-        setMicListening(false);
-      };
-
-      try {
-        recognition.start();
-      } catch (e) {
-        setText("micStatus", "マイク開始に失敗しました。");
-      }
-    }
-
-    async function scoreSpeech(text) {
-      try {
-        const res = await fetch(WORKER_URL + "/chat", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            text,
-            targetLine: currentTargetLine,
-            scene: currentSceneGenre
-          })
-        });
-
-        const data = await res.json();
-
-        if (!res.ok || data.error) {
-          setHTML("resultArea", "採点に失敗しました。");
-          setText("micStatus", "採点エラーです。");
-          return;
-        }
-
-        const goodHtml = Array.isArray(data.good)
-          ? data.good.map(v => "・" + escapeHtml(v)).join("<br>")
-          : "・よく読めています";
-
-        const improveHtml = Array.isArray(data.improve)
-          ? data.improve.map(v => "・" + escapeHtml(v)).join("<br>")
-          : "・もう一度読んでみよう";
-
-        setHTML("resultArea", `
-          <div class="score-big">${escapeHtml(String(data.score))}点</div>
-          <strong>良い点</strong><br>${goodHtml}<br><br>
-          <strong>改善</strong><br>${improveHtml}<br><br>
-          <strong>おすすめの言い方</strong><br>${escapeHtml(data.example || currentTargetLine)}
-          <div class="recognized"><strong>認識結果:</strong><br>${escapeHtml(data.recognized || text)}</div>
-        `);
-
-        setText("micStatus", "もう一度話すか、次へ進めます。");
-      } catch (e) {
-        setHTML("resultArea", "採点中に接続エラーが発生しました。");
-        setText("micStatus", "接続エラーです。");
-      }
-    }
-
-    loadVoices();
-    if ("speechSynthesis" in window) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-  </script>
+
+<div class="container">
+
+<h2>🎬 Dream Step Final</h2>
+
+<div id="pass">
+<input id="code" placeholder="パスコード">
+<button onclick="login()">入る</button>
+</div>
+
+<div id="app" class="hidden">
+
+<div class="card">
+<div id="scene"></div>
+<div id="scene_ja"></div>
+<button class="speak" onclick="speak(sceneText)">📣</button>
+</div>
+
+<div class="card">
+<div id="reply"></div>
+<div id="reply_ja"></div>
+<button class="speak" onclick="speak(replyText)">📣</button>
+</div>
+
+<button class="mic" onclick="rec()">🎤 話す</button>
+
+<div id="result"></div>
+
+<button class="next" onclick="load()">▶ 次へ</button>
+
+</div>
+
+</div>
+
+<script>
+
+const URL="https://ai-memory-worker.gudafutanu.workers.dev";
+
+let sceneText="";
+let replyText="";
+
+async function login(){
+ const code=document.getElementById("code").value;
+
+ const res=await fetch(URL+"/check-passcode",{
+  method:"POST",
+  headers:{"Content-Type":"application/json"},
+  body:JSON.stringify({code})
+ });
+
+ const data=await res.json();
+
+ if(data.ok){
+  document.getElementById("pass").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  load();
+ }else{
+  alert("パスコード違い");
+ }
+}
+
+async function load(){
+ const res=await fetch(URL+"/generate",{method:"POST"});
+ const data=await res.json();
+
+ sceneText=data.scene_en;
+ replyText=data.reply_en;
+
+ document.getElementById("scene").innerText=data.scene_en;
+ document.getElementById("scene_ja").innerText=data.scene_ja;
+ document.getElementById("reply").innerText=data.reply_en;
+ document.getElementById("reply_ja").innerText=data.reply_ja;
+ document.getElementById("result").innerText="";
+}
+
+function speak(text){
+ const u=new SpeechSynthesisUtterance(text);
+ u.lang="en-US";
+ speechSynthesis.speak(u);
+}
+
+function rec(){
+ const r=new webkitSpeechRecognition();
+ r.lang="en-US";
+
+ r.onresult=async(e)=>{
+  const text=e.results[0][0].transcript;
+
+  const res=await fetch(URL+"/score",{
+   method:"POST",
+   headers:{"Content-Type":"application/json"},
+   body:JSON.stringify({text,target:replyText})
+  });
+
+  const data=await res.json();
+
+  document.getElementById("result").innerHTML=
+   "⭐ "+data.score+"点<br>"+
+   "👍 "+data.good.join(", ")+"<br>"+
+   "⚠ "+data.improve.join(", ")+"<br>"+
+   "💡 "+data.example;
+ };
+
+ r.start();
+}
+
+</script>
+
 </body>
 </html>
